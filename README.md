@@ -80,9 +80,41 @@ Compatibility with CUDA:
 https://developer.nvidia.com/cuda-gpus
 https://docs.nvidia.com/deploy/cuda-compatibility/index.html
 
-Download NVIDIA driver from (preferably Game Ready Driver):
-https://www.nvidia.com/Download/index.aspx
+Download [NVIDIA driver](https://www.nvidia.com/Download/index.aspx) (preferably Game Ready Driver).
 
+Then you can follow [full guide of how to install TF without CUDA on Win10](https://www.pugetsystems.com/labs/hpc/How-to-Install-TensorFlow-with-GPU-Support-on-Windows-10-Without-Installing-CUDA-UPDATED-1419/) written by [Dr Donald Kinghorn](https://www.pugetsystems.com/bios.php?name=donkinghorn).
+
+Short version of how to install:
+
+At first install Anaconda (if you still didn't complete it) that was described in section ## Anaconda installation.
+
+Then in Anaconda promt:
+
+```bash
+conda create --name tf-gpu
+conda activate tf-gpu
+conda install tensorflow-gpu
+```
+
+Install jupyter if you didn't and ipykernel (including with tf-gpu-version).
+```bash
+conda install ipykernel jupyter
+python -m ipykernel install --user --name tf-gpu --display-name "TensorFlow-GPU-1.13"
+jupyter notebook
+```
+
+Try to check the [gpu devices](https://stackoverflow.com/questions/38559755/how-to-get-current-available-gpus-in-tensorflow) using:
+
+```python
+from tensorflow.python.client import device_lib
+local_device_protos = device_lib.list_local_devices()
+print([x.name for x in local_device_protos if x.device_type == 'GPU'])
+```
+
+You must see something like:
+> name: Gece GTX XXX major: X minor: X memoryClockRate(GHz): ...
+>
+> ['/device:GPU:0']
 
 ## [gpu with CUDA]
 
