@@ -119,3 +119,50 @@ You must see something like:
 ## [gpu with CUDA]
 
 https://www.youtube.com/watch?v=KZFn0dvPZUQ
+
+# caffe installation guide
+
+Caffe installation guide
+
+## Beginning
+
+For gpu check if your version is [compatible with CUDA](https://developer.nvidia.com/cuda-gpus).
+
+Install last version of [gpu driver](https://www.nvidia.com/Download/Find.aspx).
+
+Caffe requires CUDA packages before main installation. So it is better to [download CUDA](https://developer.nvidia.com/cuda-downloads)
+and [cuDNN](https://developer.nvidia.com/cudnn). Also check the compatibility of:
+1. NVIDIA GPU drivers
+1. CUDA
+1. cuDNN
+
+Unpack cuDNN and copy files:
+/cuda/
+1. bin/
+1. include/
+1. lib/
+1. txt file (not necessary)
+in the directory of the CUDA (e.g C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/
+
+## Installation in conda
+
+Check open [issue on github](https://github.com/BVLC/caffe/issues/6569).
+
+Be sure that CUDA (and its directories) are visible for your system (e.g check PATH variable on Win10).
+
+In conda promt:
+```bash
+conda create --name caffe-gpu
+conda activate caffe-gpu
+conda config --add channels anaconda
+conda install caffe -c willyd
+```
+
+In Python console try:
+```bash
+import caffe
+```
+
+## By hands
+
+Follow [guide](https://www.youtube.com/watch?v=SeCE757egcE)
