@@ -1,3 +1,134 @@
+# Windows Ubuntu subsystem installation guide
+
+This guide contains similar steps as described [by NVIDIA](https://docs.nvidia.com/cuda/wsl-user-guide/index.html) but with more details. You can also follow [YouTube guide](https://www.youtube.com/watch?v=mWd9Ww9gpEM) made by Jeff Heaton.
+
+Windows10 *prerelease* build 
+
+## WSL2 Installation
+
+Complete installation guide [by Microsoft](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+
+To install WSL2 you must be sure that your CPU supports *CPU Virtualization feature* and also this option must be enabled in UEFI.
+
+If you want to install  WSL2 you must have at least ***version 1903 (build 18362)***.
+
+If you want to also install CUDA in your WSL2 you must have at least ***version 2004 with kernel 4.19.121+ (build 20145, prerelease)***.
+
+WSL2
+
+As long as Windows prerelease builds are the part of Windows Insider Program you need to register in this program.
+In Windows:
+**Start** > **Settings** > **Privacy** > **Diagnostics & feedback** > :ballot_box_with_check: ✔**Optional**
+
+[//]: # ":ballot_box_with_check:"
+
+Enable Dev Channel to get latest update from Inside Program.
+**Start** > **Settings** > **Update & security** > **Windows 10 Insider Preview** > ✔**Dev Channel**
+
+Windows will switch build and download new updates. It requires multiple reboots.
+
+Hyper-V in Windows Features must be disabled if you want to use WSL version 2.
+```
+dism.exe /Online /Disable-Feature:Microsoft-Hyper-V /All
+```
+
+Microsoft Windows Subsystem for Linux and Virtual Machine Platform must be enabled.
+```
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+After that you will need to reboot your system.
+
+You can check your Kernel with following command:
+```
+wsl cat /proc/version
+```
+
+Set your WSL to version 2.
+```
+wsl --set-default-version 2
+```
+If there are warnings related to virtualization, then you have not enabled CPU virtualization/disabled Hyper-V.
+
+Next step is to install Ubuntu from Microsoft Store (20.04 is more preferable). Download and install it (choose user login/password).
+
+You can then check subsystems.
+```
+wsl --list
+```
+
+## Setting up CUDA Toolkit
+
+[Download](https://developer.nvidia.com/cuda/wsl/download) and install NVIDIA CUDA on WSL driver on Windows.
+
+In Ubuntu:
+```bash
+sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+sudo sh -c 'echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/cuda.list'
+sudo apt-get update
+```
+
+Install cuda-toolkit last version.
+```bash
+apt-get install -y cuda-toolkit-11-0
+```
+
+New version of CUDA must appear
+```bash
+nvidia-smi.exe
+```
+
+Make CUDA example of Black-Scholes executing on GPU kernel 
+```bash
+cd /usr/local/cuda/samples/4_Finance/BlackScholes
+make -j12
+./BlackScholes
+```
+Test must be passed if everything was installed properly.
+
+## Setting up Miniconda3 on Ubuntu
+
+Download and install Miniconda3.
+```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+Agree with license terms and add it using conda init if you want.
+
+## Setting up monitor forwarding
+
+[Install VcXsrv](https://sourceforge.net/projects/vcxsrv/) on host machine (Windows).
+
+Thereafter follow the [guide](https://dev.to/rescenic/comment/obea).
+
+```bash
+sudo apt update && sudo apt -y upgrade
+sudo apt-get purge xrdp
+sudo apt install xrdp
+sudo apt install -y xfce4
+sudo apt install -y xfce4-goodies
+
+sudo cp /etc/xrdp/xrdp.ini /etc/xrdp/xrdp.ini.bak
+sudo sed -i 's/3389/3390/g' /etc/xrdp/xrdp.ini
+sudo sed -i 's/max_bpp=32/#max_bpp=32\nmax_bpp=128/g' /etc/xrdp/xrdp.ini
+sudo sed -i 's/xserverbpp=24/#xserverbpp=24\nxserverbpp=128/g' /etc/xrdp/xrdp.ini
+echo xfce4-session > ~/.xsession
+
+sudo nano /etc/xrdp/startwm.sh
+-comment these lines to:
+#test -x /etc/X11/Xsession && exec /etc/X11/Xsession
+#exec /bin/sh /etc/X11/Xsession
+	
+-add these lines:
+# xfce
+startxfce4
+
+sudo /etc/init.d/xrdp start
+
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+```
+
 # TensorFlow installation guide
 
 TensorFlow installation guide
@@ -120,7 +251,7 @@ You must see something like:
 
 https://www.youtube.com/watch?v=KZFn0dvPZUQ
 
-# caffe installation guide
+# Caffe installation guide
 
 Caffe installation guide
 
