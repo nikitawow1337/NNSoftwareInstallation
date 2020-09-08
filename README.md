@@ -129,6 +129,54 @@ sudo /etc/init.d/xrdp start
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 ```
 
+## Install cuDNN
+
+Follow the [guide](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html).
+
+Download [cuDNN](https://developer.nvidia.com/cudnn-download-survey) 8.0.3 for CUDA 11.0.
+
+[Archive](https://developer.nvidia.com/rdp/cudnn-archive) is also available. You need to install 8.0.2+ for CUDA 11.0.
+
+```bash
+mv cudnn-11.0-linux-x64-v8.0.3.33.solitairetheme8 cudnn-11.0-linux-x64-v8.0.3.33.ga.tgz
+tar -xzvf cudnn-11.0-linux-x64-v8.0.3.33.ga.tgz
+sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
+sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
+```
+Check if there is file *libcudnn.so.8.0.3* in /usr/local/cuda/lib64/.
+
+## Building OpenCV from sources
+
+CUDA + cuDNN must be installed on your system before building up OpenCV.
+
+[Example](https://medium.com/@sb.jaduniv/how-to-install-opencv-4-2-0-with-cuda-10-1-on-ubuntu-20-04-lts-focal-fossa-bdc034109df3) of installation guide.
+
+```bash
+mkdir opencv && cd opencv
+git clone https://github.com/opencv/opencv
+git clone https://github.com/opencv/opencv_contrib
+```
+
+```bash
+# set up cmake flags with your own flags and paths
+sudo sh ocvbuild.sh
+```
+
+Go to build and make OpenCV with your number of cores.
+```bash
+cd opencv/build
+nproc
+sudo make -j12
+sudo make install 
+```
+
+Put libs in current enviroment.
+```bash
+sudo /bin/bash -c 'echo "/usr/local/lib" >> /etc/ld.so.conf.d/opencv.conf'
+sudo ldconfig
+```
+
 # TensorFlow installation guide
 
 TensorFlow installation guide
