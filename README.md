@@ -25,6 +25,11 @@ In Windows:
 Enable Dev Channel to get latest update from Inside Program.
 **Start** > **Settings** > **Update & security** > **Windows 10 Insider Preview** > ✔**Dev Channel**
 
+If changing the parameter by standard methods is unattainable, it is recommended to use the Windows regedit:
+In Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection create REG_DWORD type variable with name "AllowTelemetry" and change it to "1" value.
+
+Microsoft profile registration required to participate in the Inside Program. For the most convenient centralized management using [Outlook](https://www.microsoft.com/en-us/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook) is recommended.
+
 Windows will switch build and download new updates. It requires multiple reboots.
 
 Hyper-V in Windows Features must be disabled if you want to use WSL version 2.
