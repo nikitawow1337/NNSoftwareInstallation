@@ -76,21 +76,39 @@ sudo apt-get update
 
 Install cuda-toolkit last version.
 ```bash
-apt-get install -y cuda-toolkit-11-0
+sudo apt-get install -y cuda-toolkit-11-0
 ```
 
-New version of CUDA must appear
+Maximum version of CUDA is in smi
 ```bash
 nvidia-smi.exe
 ```
 
+## Setting up cuDNN
+
+Follow the [guide](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html).
+
+Download [cuDNN](https://developer.nvidia.com/cudnn-download-survey) 8.0.3 for CUDA 11.0.
+
+[Archive](https://developer.nvidia.com/rdp/cudnn-archive) is also available. You need to install 8.0.2+ for CUDA 11.0.
+
+```bash
+mv cudnn-11.0-linux-x64-v8.0.3.33.solitairetheme8 cudnn-11.0-linux-x64-v8.0.3.33.ga.tgz
+tar -xzvf cudnn-11.0-linux-x64-v8.0.3.33.ga.tgz
+sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
+sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
+```
+Check if there is file *libcudnn.so.8.0.3* in /usr/local/cuda/lib64/.
+
 Make CUDA example of Black-Scholes executing on GPU kernel 
 ```bash
 cd /usr/local/cuda/samples/4_Finance/BlackScholes
-make -j12
-./BlackScholes
+sudo make -j12
+sudo ./BlackScholes
 ```
 Test must be passed if everything was installed properly.
+If it was checked without cuDNN try to remake it.
 
 ## Setting up Miniconda3 on Ubuntu
 
@@ -100,6 +118,13 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 ```
 Agree with license terms and add it using conda init if you want.
+
+In new tab create new environment and install numpy. It is required to build OpenCV properly.
+```bash
+conda create -n tfgpu python=3.8 # Y - agree to install
+conda activate tfgpu
+conda install numpy
+```
 
 ## Setting up monitor forwarding
 
@@ -134,23 +159,6 @@ sudo /etc/init.d/xrdp start
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 ```
 
-## Install cuDNN
-
-Follow the [guide](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html).
-
-Download [cuDNN](https://developer.nvidia.com/cudnn-download-survey) 8.0.3 for CUDA 11.0.
-
-[Archive](https://developer.nvidia.com/rdp/cudnn-archive) is also available. You need to install 8.0.2+ for CUDA 11.0.
-
-```bash
-mv cudnn-11.0-linux-x64-v8.0.3.33.solitairetheme8 cudnn-11.0-linux-x64-v8.0.3.33.ga.tgz
-tar -xzvf cudnn-11.0-linux-x64-v8.0.3.33.ga.tgz
-sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
-sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
-sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
-```
-Check if there is file *libcudnn.so.8.0.3* in /usr/local/cuda/lib64/.
-
 ## Building OpenCV from sources
 
 CUDA + cuDNN must be installed on your system before building up OpenCV.
@@ -161,6 +169,35 @@ CUDA + cuDNN must be installed on your system before building up OpenCV.
 mkdir opencv && cd opencv
 git clone https://github.com/opencv/opencv
 git clone https://github.com/opencv/opencv_contrib
+```
+
+Install all required packages and libraries.
+```bash
+sudo apt update
+sudo apt upgrade
+
+sudo apt install build-essential cmake pkg-config unzip yasm git checkinstall
+
+sudo apt install libjpeg-dev libpng-dev libtiff-dev
+
+sudo apt install libavcodec-dev libavformat-dev libswscale-dev libavresample-dev
+sudo apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+sudo apt install libxvidcore-dev x264 libx264-dev libfaac-dev libmp3lame-dev libtheora-dev
+sudo apt install libfaac-dev libmp3lame-dev libvorbis-dev
+
+sudo apt install libopencore-amrnb-dev libopencore-amrwb-dev
+
+# sudo apt-get install libdc1394-22 libdc1394-22-dev libxine2-dev libv4l-dev v4l-utils
+
+sudo apt-get install libgtk-3-dev
+
+sudo apt-get install python3-dev python3-pip
+sudo -H pip3 install -U pip numpy
+sudo apt install python3-testresources
+
+sudo apt-get install libtbb-dev
+
+sudo apt-get install libatlas-base-dev gfortran
 ```
 
 ```bash
