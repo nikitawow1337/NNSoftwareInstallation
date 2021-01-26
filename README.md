@@ -219,6 +219,39 @@ sudo /bin/bash -c 'echo "/usr/local/lib" >> /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
 ```
 
+## Building dlib with GPU from sources
+
+At first check [CUDA compatibility with gcc](https://stackoverflow.com/questions/6622454/cuda-incompatible-with-my-gcc-version).
+
+Clone repository, build it using cmake and install in current Python environment.
+```bash
+git clone https://github.com/davisking/dlib.git
+cd dlib
+mkdir build; cd build; cmake ..; cmake --build .
+cd ..
+python3 setup.py install
+```
+
+Check in Python environment if dlib was installed using CUDA successfully.
+```python
+import dlib
+
+# should be "True"
+dlib.DLIB_USE_CUDA 
+
+# should be "1"
+print(dlib.cuda.get_num_devices()) 
+```
+
+If current version of CUDA is incompatible with gcc.
+```bash
+sudo apt -y install gcc-8 g++-8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 8
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 8
+```
+
+Then reproduce previous steps (remake and build) again.
+
 # SSH into WSL2
 In WSL2 cmd:
 ```bash
