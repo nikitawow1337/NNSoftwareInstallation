@@ -219,6 +219,17 @@ sudo /bin/bash -c 'echo "/usr/local/lib" >> /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
 ```
 
+ImportError: /bin/../lib/libgio-2.0.so.0: undefined symbol: g_uri_join
+Try to copy the same version of file from /usr/lib/x86_64-linux-gnu/ in conda lib.
+```bash
+cd ~/miniconda3/envs/tfgpu/lib
+cp /usr/lib/x86_64-linux-gnu/libgio-2.0.so ./
+```
+Or "remove" libgio-2.0.so.0 file from conda lib.
+```bash
+mv libgio-2.0.so.0 _libgio-2.0.so.0
+```
+
 ## Building dlib with GPU from sources
 
 At first check [CUDA compatibility with gcc](https://stackoverflow.com/questions/6622454/cuda-incompatible-with-my-gcc-version).
