@@ -110,6 +110,15 @@ sudo ./BlackScholes
 Test must be passed if everything was installed properly.
 If it was checked without cuDNN try to remake it.
 
+## Setting up Nvidia drivers in classic Ubuntu 20.04
+
+```bash
+sudo apt-get remove --purge '^nvidia-.*'
+sudo ubuntu-drivers devices
+sudo ubuntu-drivers install
+# sudo ubuntu-drivers autoinstall
+```
+
 ## Setting up Miniconda3 on Ubuntu
 
 Download and install Miniconda3.
