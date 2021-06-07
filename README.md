@@ -168,6 +168,21 @@ sudo /etc/init.d/xrdp start
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 ```
 
+## Setting up required language
+```bash
+locale -a
+
+sudo locale-gen ru_RU
+sudo locale-gen ru_RU.UTF-8
+
+sudo update-locale 
+```
+
+In XMing session additional settings:
+```bash
+-xkbmodel pc105 -xkblayout us,se -xkboptions grp:ctrl_shift_toggle
+```
+
 ## Building OpenCV from sources
 
 CUDA + cuDNN must be installed on your system before building up OpenCV.
