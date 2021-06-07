@@ -168,7 +168,7 @@ sudo /etc/init.d/xrdp start
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 ```
 
-## Setting up required language
+## Setting up required language in WSL
 ```bash
 locale -a
 
@@ -178,9 +178,9 @@ sudo locale-gen ru_RU.UTF-8
 sudo update-locale 
 ```
 
-In XMing session additional settings:
+In XLaunch session additional parameters VcXsrv:
 ```bash
--xkbmodel pc105 -xkblayout us,se -xkboptions grp:ctrl_shift_toggle
+-xkbmodel pc105 -xkblayout us,ru -xkboptions grp:alt_shift_toggle
 ```
 
 ## Building OpenCV from sources
