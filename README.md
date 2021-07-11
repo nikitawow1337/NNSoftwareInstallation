@@ -37,6 +37,11 @@ Hyper-V in Windows Features must be disabled if you want to use WSL version 2.
 dism.exe /Online /Disable-Feature:Microsoft-Hyper-V /All
 ```
 
+Alternatively next command can be used.
+```
+bcdedit /set hypervisorlaunchtype off
+```
+
 Microsoft Windows Subsystem for Linux and Virtual Machine Platform must be enabled.
 ```
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
