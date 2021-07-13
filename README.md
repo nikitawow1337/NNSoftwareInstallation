@@ -188,6 +188,15 @@ In XLaunch session additional parameters VcXsrv:
 -xkbmodel pc105 -xkblayout us,ru -xkboptions grp:alt_shift_toggle
 ```
 
+## Adding new user
+It is recommended to create user with /bin/bash shell. -G is for sudo.
+```bash
+sudo useradd -s /bin/bash -d /home/username -m -G username
+sudo passwd username
+
+sudo deluser --remove-home username
+```
+
 ## Building OpenCV from sources
 
 CUDA + cuDNN must be installed on your system before building up OpenCV.
